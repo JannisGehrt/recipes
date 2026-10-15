@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Week 1 Shopping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="../assets/recipe.css">
+</head>
+<body data-key="w01-shopping">
+<div class="wrap">
+  <header>
+    <a class="back" href="../">← All weeks</a>
+    <div class="eyebrow">Week 1 · shopping list · for 2</div>
+    <h1>Shopping list</h1>
+    <div class="meta"><span>Ticked <b data-count-for="shop">0 of 18</b></span></div>
+  </header>
+
+  <section aria-labelledby="check-h">
+    <h2 id="check-h">Check your kitchen first</h2>
+    <div class="staples">
+      <p class="list">Olive oil · tomato paste · harissa paste · ground cumin · sweet paprika · dried thyme · grated nutmeg · chilli flakes · salt · pepper · <strong>couscous (need 150 g)</strong></p>
+    <p>Harissa is the likely gap. It keeps for months in the fridge.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="buy-h" class="shop">
+    <h2 id="buy-h">To buy</h2>
+    <h3>Fruit & vegetables</h3>
+    <ul class="checklist compact" data-checklist="shop">
+      <li><label for="s1"><input type="checkbox" id="s1"><div><strong>Onion</strong> <span class="qty">— 1</span><span class="note">or 2 shallots</span></div></label></li>
+      <li><label for="s2"><input type="checkbox" id="s2"><div><strong>Garlic</strong> <span class="qty">— 1 bulb</span></div></label></li>
+      <li><label for="s3"><input type="checkbox" id="s3"><div><strong>Baby spinach</strong> <span class="qty">— 200 g</span></div></label></li>
+      <li><label for="s4"><input type="checkbox" id="s4"><div><strong>Cucumber</strong> <span class="qty">— 1</span></div></label></li>
+      <li><label for="s5"><input type="checkbox" id="s5"><div><strong>Radishes</strong> <span class="qty">— 1 bunch</span></div></label></li>
+      <li><label for="s6"><input type="checkbox" id="s6"><div><strong>Spring onions</strong> <span class="qty">— 1 bunch</span></div></label></li>
+      <li><label for="s7"><input type="checkbox" id="s7"><div><strong>Lemons</strong> <span class="qty">— 2</span></div></label></li>
+      <li><label for="s8"><input type="checkbox" id="s8"><div><strong>Parsley</strong> <span class="qty">— 1 bunch</span></div></label></li>
+      <li><label for="s9"><input type="checkbox" id="s9"><div><strong>Mint</strong> <span class="qty">— small bunch</span><span class="note">optional, good in the salad</span></div></label></li>
+    </ul>
+    <h3>Chilled</h3>
+    <ul class="checklist compact" data-checklist="shop">
+      <li><label for="s10"><input type="checkbox" id="s10"><div><strong>Gnocchi</strong> <span class="qty">— 500 g</span><span class="note">vacuum pack, chilled shelf</span></div></label></li>
+      <li><label for="s11"><input type="checkbox" id="s11"><div><strong>Cottage cheese (Hüttenkäse)</strong> <span class="qty">— 250 g</span><span class="note">this is the cream sauce</span></div></label></li>
+      <li><label for="s12"><input type="checkbox" id="s12"><div><strong>Hard cheese, vegetarian rennet</strong> <span class="qty">— 50 g piece</span></div></label></li>
+      <li><label for="s13"><input type="checkbox" id="s13"><div><strong>Halloumi</strong> <span class="qty">— 250 g</span></div></label></li>
+      <li><label for="s14"><input type="checkbox" id="s14"><div><strong>Greek yoghurt</strong> <span class="qty">— 250 g</span></div></label></li>
+    </ul>
+    <h3>Cans & dry goods</h3>
+    <ul class="checklist compact" data-checklist="shop">
+      <li><label for="s15"><input type="checkbox" id="s15"><div><strong>Cannellini or butter beans</strong> <span class="qty">— 1 × 400 g</span></div></label></li>
+      <li><label for="s16"><input type="checkbox" id="s16"><div><strong>Chickpeas</strong> <span class="qty">— 1 × 400 g</span></div></label></li>
+    </ul>
+    <h3>Meat — only if you want it</h3>
+    <p class="lede">Single portions, for your plate only.</p>
+    <ul class="checklist compact" data-checklist="shop">
+      <li><label for="s17"><input type="checkbox" id="s17"><div><strong>Bacon or chorizo</strong> <span class="qty">— 100 g</span><span class="note">gnocchi</span></div></label></li>
+      <li><label for="s18"><input type="checkbox" id="s18"><div><strong>Chicken breast</strong> <span class="qty">— 1, ~150 g</span><span class="note">halloumi bowl</span></div></label></li>
+    </ul>
+    <div><button type="button" class="ghost" data-clear="shop">Clear list</button></div>
+  </section>
+</div>
+<script src="../assets/recipe.js"></script>
+</body>
+</html>
