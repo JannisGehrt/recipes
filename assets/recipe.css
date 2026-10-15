@@ -154,27 +154,6 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .chip[data-state="done"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .chip span { font-family: var(--font-body); font-weight: 700; margin-right: 8px; }
 
-/* full-screen alarm */
-.alarm {
-  position: fixed; inset: 0; z-index: 50;
-  display: grid; place-content: center; gap: 28px; text-align: center;
-  background: var(--yolk); color: var(--yolk-ink);
-  padding: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
-  animation: flash .5s steps(1) infinite;
-}
-.alarm[data-kind="cue"] { animation-iteration-count: 4; }
-.alarm .what { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.4rem, 11vw, 4.5rem); line-height: 1; text-wrap: balance; }
-.alarm .sub { font-size: 1.1rem; font-weight: 700; }
-.alarm button {
-  justify-self: center; min-width: 12rem; min-height: 64px; font-size: 1.25rem; font-weight: 700;
-  background: var(--yolk-ink); color: var(--yolk); border-color: var(--yolk-ink);
-}
-@keyframes flash { 50% { background: var(--surface); color: var(--ink); } }
-
-@keyframes pulse { 50% { transform: scale(1.04); } }
-.timer[data-state="done"], .chip[data-state="done"] { animation: pulse 1s ease-in-out 3; }
-@media (prefers-reduced-motion: reduce) { *, .alarm { animation: none !important; } }
-
 /* start page */
 .weeks { display: grid; gap: 14px; }
 .week { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }

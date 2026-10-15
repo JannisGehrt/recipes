@@ -28,22 +28,20 @@
   if (!document.querySelector(".timer")) return;
 
   // ---------- alarm sound ----------
-  // A loud kitchen-timer pattern rendered to a WAV once, played through an <audio> element.
+  // A soft two-note chime rendered to a WAV once, played through an <audio> element.
   // <audio> plays at full media volume and, on iPhones, even with the ring switch on silent.
-  function makeAlarm(seconds) {
-    const rate = 22050, n = Math.floor(rate * seconds), pcm = new Int16Array(n);
-    const beep = 0.09, gap = 0.05, groupGap = 0.32, freqs = [2100, 2700];
-    let t = 0, k = 0;
-    while (t < seconds) {
-      for (let b = 0; b < 4 && t < seconds; b++) {
-        const f = freqs[(k + b) % 2], s0 = Math.floor(t * rate), s1 = Math.min(n, Math.floor((t + beep) * rate));
-        for (let i = s0; i < s1; i++) {
-          const x = (i - s0) / rate, edge = Math.min(1, x / 0.003, (beep - x) / 0.003);
-          pcm[i] = Math.max(-1, Math.min(1, Math.sign(Math.sin(2 * Math.PI * f * x)) * 0.92 * edge)) * 32767;
+  function makeChime(rounds) {
+    const rate = 22050, round = 1.4, notes = [[0, 1046.5], [0.28, 784]]; // C6 then G5, like a doorbell
+    const n = Math.floor(rate * round * rounds), pcm = new Int16Array(n);
+    for (let r = 0; r < rounds; r++) {
+      notes.forEach(([at, f]) => {
+        const s0 = Math.floor((r * round + at) * rate), len = Math.min(n - s0, Math.floor(1.1 * rate));
+        for (let i = 0; i < len; i++) {
+          const x = i / rate, env = Math.min(1, x / 0.005) * Math.exp(-x * 4);
+          const tone = Math.sin(2 * Math.PI * f * x) + 0.25 * Math.sin(2 * Math.PI * f * 2 * x) * Math.exp(-x * 6);
+          pcm[s0 + i] = Math.max(-32767, Math.min(32767, pcm[s0 + i] + tone * env * 0.4 * 32767));
         }
-        t += beep + gap;
-      }
-      k++; t += groupGap;
+      });
     }
     const buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
     const str = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
@@ -56,7 +54,7 @@
     a.preload = "auto";
     return a;
   }
-  const sounds = { done: makeAlarm(5), cue: makeAlarm(2) };
+  const sounds = { done: makeChime(3), cue: makeChime(1) };
   let unlocked = false;
   function unlock() {
     if (unlocked) return; unlocked = true;
@@ -67,31 +65,17 @@
       if (p && p.then) p.then(reset).catch(() => { a.muted = false; unlocked = false; }); else reset();
     });
   }
-  document.addEventListener("pointerdown", unlock, { capture: true });
-  document.addEventListener("keydown", unlock, { capture: true });
+  function stopSound() { Object.values(sounds).forEach(a => { if (!a.muted) { a.pause(); a.currentTime = 0; } }); try { navigator.vibrate && navigator.vibrate(0); } catch (e) {} }
+  // Any tap or key press silences a ringing chime.
+  document.addEventListener("pointerdown", () => { stopSound(); unlock(); }, { capture: true });
+  document.addEventListener("keydown", () => { stopSound(); unlock(); }, { capture: true });
 
-  const overlay = document.createElement("div");
-  overlay.className = "alarm"; overlay.hidden = true; overlay.setAttribute("role", "alertdialog");
-  overlay.innerHTML = '<div class="what"></div><div class="sub"></div><button type="button">Got it</button>';
-  document.body.appendChild(overlay);
-  let hideTimer = null;
-  function stopSound() { Object.values(sounds).forEach(a => { a.pause(); a.currentTime = 0; }); try { navigator.vibrate && navigator.vibrate(0); } catch (e) {} }
-  function dismiss() { stopSound(); overlay.hidden = true; clearTimeout(hideTimer); }
-  overlay.querySelector("button").addEventListener("click", dismiss);
-
-  function ring(kind, what, sub) {
+  function ring(kind) {
     stopSound();
     const a = sounds[kind];
     a.currentTime = 0;
     a.play().catch(() => {});
-    try { navigator.vibrate && navigator.vibrate(kind === "done" ? Array(10).fill([350, 150]).flat() : [350, 150, 350, 150, 350]); } catch (e) {}
-    overlay.dataset.kind = kind;
-    overlay.querySelector(".what").textContent = what;
-    overlay.querySelector(".sub").textContent = sub;
-    overlay.hidden = false;
-    overlay.querySelector("button").focus();
-    clearTimeout(hideTimer);
-    if (kind === "cue") hideTimer = setTimeout(() => { overlay.hidden = true; }, 6000);
+    try { navigator.vibrate && navigator.vibrate(kind === "done" ? [200, 100, 200] : 200); } catch (e) {}
   }
 
   // ---------- timers ----------
@@ -154,10 +138,10 @@
       t.left = (t.end - Date.now()) / 1000;
       if (t.cue !== null && !t.cued && t.left <= t.cue && t.left > 0) {
         t.cued = true;
-        ring("cue", t.cueText, t.label + " · " + fmt(t.left) + " left");
+        ring("cue");
         if (t.note) { t.note.textContent = t.cueText; t.note.classList.add("cue-live"); }
       }
-      if (t.left <= 0) { t.left = 0; t.state = "done"; ring("done", t.label + " — time's up", "Tap to stop the alarm"); }
+      if (t.left <= 0) { t.left = 0; t.state = "done"; ring("done"); }
       render(t); changed = true;
     });
     if (changed) tray();
