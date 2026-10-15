@@ -1,1 +1,8 @@
 .DS_Store
+
+# Not part of the website — local only
+.claude/
+CLAUDE.md
+README.md
+build.py
+data/
